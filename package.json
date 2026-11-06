@@ -1,0 +1,35 @@
+{
+  "name": "arrowstack-task1-jwt-auth-microservice",
+  "version": "1.0.0",
+  "description": "Role-Based User Authentication & JWT Microservice — Arrowstack Batch 2026 Task 1 (Ref: AS-2026-7346)",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/seed.js",
+    "test": "node --test tests/"
+  },
+  "keywords": ["jwt", "authentication", "rbac", "microservice", "express", "arrowstack"],
+  "author": "Bhumika Gandhi <bhumika2005gandhi@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

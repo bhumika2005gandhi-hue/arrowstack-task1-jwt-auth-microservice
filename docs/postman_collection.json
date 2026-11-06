@@ -1,0 +1,138 @@
+{
+  "info": {
+    "name": "Arrowstack JWT Auth Microservice",
+    "_postman_id": "as-2026-7346-task1",
+    "description": "Postman collection for Arrowstack Batch 2026 Task 1 — Role-Based User Authentication & JWT Microservice.\nRef: AS-2026-7346 · Author: Bhumika Gandhi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/health"
+      }
+    },
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"demo@arrowstack.org\",\n  \"username\": \"demo_user\",\n  \"password\": \"Demo@12345\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Login (admin)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const r = pm.response.json();",
+              "if (r.data && r.data.tokens) {",
+              "  pm.collectionVariables.set('accessToken', r.data.tokens.accessToken);",
+              "  pm.collectionVariables.set('refreshToken', r.data.tokens.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@arrowstack.org\",\n  \"password\": \"Admin@12345\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Current User (/me)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/auth/me",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Refresh Token",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/refresh",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Change Password",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/change-password",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentPassword\": \"Admin@12345\",\n  \"newPassword\": \"NewAdmin@123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "List Users (admin only)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/admin/users",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Update User Role (admin only)",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/admin/users/{{targetUserId}}/role",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"role\": \"moderator\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/logout",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+        }
+      }
+    }
+  ]
+}
